@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 #Activate the virtual environment if there's one for this project
 from settings import UNDER_VIRTUALENV, VIRTUALENV
@@ -7,9 +6,8 @@ if UNDER_VIRTUALENV is True:
         VIRTUALENV)
     execfile(activate_this, dict(__file__=activate_this))
 
-import os
-from settings import POST_COMMIT as scripts
-hooks = __import__('post_commit_scripts', globals(), locals(), scripts, 0)
+from sh import pip
+from settings import REQUIREMENTS_PATH
 
-git_dir = os.environ['GIT_DIR']
-hooks_dir = os.path.join(git_dir, 'hooks/post_commit_hooks')
+f = open(REQUIREMENTS_PATH, 'w')
+f.write(str(pip.freeze()))
